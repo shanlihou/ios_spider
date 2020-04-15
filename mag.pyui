@@ -1,0 +1,55 @@
+[
+  {
+    "nodes" : [
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{0, 0}, {480, 48}}",
+        "class" : "TextView",
+        "attributes" : {
+          "font_size" : 17,
+          "uuid" : "421F2246-7EA2-43C7-BFE8-8C57F3D5A9C5",
+          "frame" : "{{20, 20}, {200, 200}}",
+          "editable" : true,
+          "alignment" : "left",
+          "autocorrection_type" : "default",
+          "text" : "anajajsjsdubudniidnindinnfinfnfjjfkfkfkfkfkf",
+          "font_name" : "<System>",
+          "spellchecking_type" : "default",
+          "class" : "TextView",
+          "name" : "textview1",
+          "flex" : "WH"
+        },
+        "selected" : true
+      },
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{0, 88}, {480, 34}}",
+        "class" : "Slider",
+        "attributes" : {
+          "uuid" : "72555761-784D-47FD-8238-8F9129406038",
+          "frame" : "{{20, 103}, {200, 34}}",
+          "value" : 0.5,
+          "class" : "Slider",
+          "name" : "slider1",
+          "flex" : "W"
+        },
+        "selected" : false
+      }
+    ],
+    "frame" : "{{0, 0}, {480, 320}}",
+    "class" : "View",
+    "attributes" : {
+      "name" : "",
+      "enabled" : true,
+      "background_color" : "RGBA(1.000000,1.000000,1.000000,1.000000)",
+      "tint_color" : "RGBA(0.000000,0.478000,1.000000,1.000000)",
+      "border_color" : "RGBA(0.000000,0.000000,0.000000,1.000000)",
+      "flex" : ""
+    },
+    "selected" : false
+  }
+]
