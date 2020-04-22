@@ -15,7 +15,7 @@ def get_dict(url):
     url_html = downloader.get_html(url)
     for detail_url in pageparser.parser_homeurl(url_html):
         if not controler.check_url_not_in_table(detail_url):
-            print('has down:', detail_url)
+            print('has down:')
             continue
 
         try:
@@ -30,7 +30,7 @@ def get_dict(url):
             traceback.print_exc()
             print("Fail to crawl %s\ncrawl next detail page......" % detail_url)
             continue
-        
+
         dict_jav['URL'] = detail_url
         yield dict_jav, detail_url
 
@@ -42,16 +42,15 @@ def join_db(url, is_uncensored):
         if not controler.check_url_not_in_table(dict_jav_data['URL']):
             print('has down:', dict_jav_data['URL'])
             continue
-            
+
         try:
-            downloader.down_jpg(dict_jav_data)
+            pic_name = downloader.down_jpg(dict_jav_data)
         except OSError as e:
             print('down jpg os:', e)
             continue
-            
-        controler.write_data(dict_jav_data, is_uncensored)
-        print("Crawled %s" % detail_url)
-        
+
+        controler.write_data(dict_jav_data, is_uncensored, pic_name)
+        print("Crawled")
 
 
 def main(entrance):
@@ -76,7 +75,7 @@ def main(entrance):
 if __name__ == '__main__':
     op = 0
     if op == 0:
-        #main(const.BASEHTTPS)
+        main(const.BASEHTTPS)
         main(''.join((const.BASEHTTPS, '/uncensored')))
     elif op == 1:
         url = ''.join((const.BASEHTTPS, '/uncensored'))

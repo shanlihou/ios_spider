@@ -20,7 +20,8 @@ def get_html(url, Referer_url=None):
 
 
 def get_page_name(page):
-    format_str = 'jpg_data_u_{}' if config.mcIns.get_config('is_u') else 'jpg_data_{}'
+    format_str = 'jpg_data_u_{}' if config.mcIns.get_config(
+        'is_u') else 'jpg_data_{}'
     return format_str.format(page)
 
 
@@ -29,7 +30,7 @@ def get_page_dir():
     page_name = get_page_name(save_page)
     if not os.path.exists(page_name):
         return page_name
-        
+
     page_count = len(os.listdir(page_name))
     if page_count >= 100:
         return get_page_name(save_page + 1)
@@ -43,7 +44,7 @@ def get_page(page_name):
 
 
 def down_jpg(dic):
-    code = dic['識別碼']
+    code = dic['code']
     url = dic['jpg_src']
     page_name = get_page_dir()
     try:
@@ -56,11 +57,13 @@ def down_jpg(dic):
     pic_name = os.path.join(page_name, code + '.jpg')
     if os.path.exists(pic_name):
         print('exist:', pic_name)
-        return
+        return ''
 
     content = get_html(url)
     with open(pic_name, 'wb') as fw:
         fw.write(content)
+
+    return pic_name
 
 
 if __name__ == '__main__':
