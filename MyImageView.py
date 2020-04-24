@@ -41,15 +41,19 @@ class MyImageView(ui.View):
         ui.set_color(self.color)
         path.fill()
         if not self.img:
-            return 
+            return
         self.x_off = (self.scr_width - (self.img_width *
                                         self.ratio / self.scr_cor)) / 2
         self.y_off = 0
         self.img.draw(self.x_off, self.y_off, self.img_width * self.ratio /
                       self.scr_cor, self.img_height * self.ratio / self.scr_cor)
-                      
+
     def reset_data(self):
         self.adaptor.reset_data()
+        self.deal_img()
+
+    def search_data(self, search_str):
+        self.adaptor.search_data(search_str)
         self.deal_img()
 
     def change_page(self, isnext):
@@ -62,7 +66,7 @@ class MyImageView(ui.View):
     def hate_current(self):
         self.adaptor.hate_current()
         self.deal_img()
-    
+
     def love_current(self):
         self.adaptor.love_current()
         self.deal_img()
@@ -83,7 +87,7 @@ class MyImageView(ui.View):
             self.process_owner_data()
             self.layout()
             self.set_needs_display()
-            
+
     def touch_began(self, a):
         x = a.location[0]
         print(x)
@@ -95,7 +99,7 @@ class MyImageView(ui.View):
     def layout(self):
         if not self.img:
             return
-        
+
         scr_height_real = self.height * self.scr_cor
         scr_width_real = self.width * self.scr_cor
         y_ratio = scr_height_real / self.img_height
@@ -120,6 +124,8 @@ class MyImageView(ui.View):
                 self.ratio = y_ratio
         else:
             print('This should never happen. :(')
+        
+        #self.ratio = 0.01
 
 
 if __name__ == '__main__':

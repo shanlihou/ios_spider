@@ -10,14 +10,12 @@ import utils
 KEY_LIST = ('URL', 'code', 'date', 'length', 'director', 'maker',
             'publish', 'series', 'actor', 'type', 'magnet', 'uncensored', 'state', 'save_path')
 
-# 用来处理用Python的sqlite3操作数据库要插入的字符串中含有中文字符的时候报错处理，配合map
-
 
 def _decode_utf8(aStr):
     return aStr.encode('utf-8', 'ignore').decode('utf-8')
 
 
-def create_db(dbname='javbus.sqlite3.db'):
+def create_db(dbname='crawler.sqlite3.db'):
     '''create a db and table if not exists'''
     conn = sqlite3.connect(dbname)
     cursor = conn.cursor()
@@ -56,15 +54,13 @@ def get_write_str():
 def write_data(dict_jav, uncensored, save_path, state=const.CodeState.normal):
     '''write_data(dict_jav, uncensored)'''
 
-    conn = sqlite3.connect("javbus.sqlite3.db")
+    conn = sqlite3.connect("crawler.sqlite3.db")
     cursor = conn.cursor()
-    # 对数据解码为unicode
     insert_data = list(
         map(_decode_utf8, (dict_jav[key] for key in KEY_LIST[:-3])))
     insert_data.append(uncensored)
     insert_data.append(state)
     insert_data.append(save_path)
-    # 插入数据
     sql_str = get_write_str()
     sql_str = sql_str % KEY_LIST
     cursor.execute(sql_str, insert_data)
@@ -76,7 +72,7 @@ def write_data(dict_jav, uncensored, save_path, state=const.CodeState.normal):
 def check_url_not_in_table(url):
     """check_url_in_db(url),if the url isn't in the table it will return True, otherwise return False"""
 
-    conn = sqlite3.connect("javbus.sqlite3.db")
+    conn = sqlite3.connect("crawler.sqlite3.db")
     cursor = conn.cursor()
     if type(url) is not str:
         url = url.decode('utf-8')
@@ -90,7 +86,7 @@ def check_url_not_in_table(url):
 
 
 def change_state_by_code(code, state):
-    conn = sqlite3.connect("javbus.sqlite3.db")
+    conn = sqlite3.connect("crawler.sqlite3.db")
     cursor = conn.cursor()
     sql_str = "update JAVBUS_DATA set state = {} where code = '{}'".format(
         state, code)
@@ -101,7 +97,7 @@ def change_state_by_code(code, state):
 
 
 def get_data():
-    conn = sqlite3.connect("javbus.sqlite3.db")
+    conn = sqlite3.connect("crawler.sqlite3.db")
     cursor = conn.cursor()
     c = cursor.execute('select * from JAVBUS_DATA')
     for row in c:
@@ -111,7 +107,7 @@ def get_data():
 
 
 def get_data_by_code(code):
-    conn = sqlite3.connect("javbus.sqlite3.db")
+    conn = sqlite3.connect("crawler.sqlite3.db")
     cursor = conn.cursor()
     c = cursor.execute(
         'select * from JAVBUS_DATA where code = "{}"'.format(code))
@@ -124,7 +120,7 @@ def get_data_by_code(code):
 
 
 def get_state_by_code(code):
-    conn = sqlite3.connect("javbus.sqlite3.db")
+    conn = sqlite3.connect("crawler.sqlite3.db")
     cursor = conn.cursor()
     c = cursor.execute(
         'select state from JAVBUS_DATA where code = "{}"'.format(code))
@@ -137,13 +133,27 @@ def get_state_by_code(code):
 
 
 def get_paths_by_state(state):
-    conn = sqlite3.connect("javbus.sqlite3.db")
+    conn = sqlite3.connect("crawler.sqlite3.db")
     cursor = conn.cursor()
     c = cursor.execute(
         'select save_path from JAVBUS_DATA where state = "{}"'.format(state))
     ret_list = []
     for row in c:
         ret_list.append(utils.fix_path(row[0]))
+    cursor.close()
+    conn.close()
+    return ret_list
+
+
+def search_data(search_str):
+    search_str = search_str.lower()
+    conn = sqlite3.connect("crawler.sqlite3.db")
+    cursor = conn.cursor()
+    c = cursor.execute('select * from JAVBUS_DATA')
+    ret_list = []
+    for row in c:
+        if search_str in row[const.CodeIndex.code].lower():
+            ret_list.append(utils.fix_path(row[const.CodeIndex.save_path]))
     cursor.close()
     conn.close()
     return ret_list
@@ -163,8 +173,8 @@ def get_code_path(code):
 
 
 def old_to_new():
-    create_db('javbus2.sqlite3.db')
-    conn = sqlite3.connect("javbus.sqlite3.db")
+    create_db('crawler2.sqlite3.db')
+    conn = sqlite3.connect("crawler.sqlite3.db")
     cursor = conn.cursor()
     c = cursor.execute('select * from JAVBUS_DATA')
     row_list = []
@@ -173,14 +183,12 @@ def old_to_new():
     cursor.close()
     conn.close()
 
-    conn = sqlite3.connect("javbus2.sqlite3.db")
+    conn = sqlite3.connect("crawler2.sqlite3.db")
     cursor = conn.cursor()
-    # 对数据解码为unicode
     for row in row_list:
 
         insert_data = list(row)
         insert_data.append(get_code_path(row[const.CodeIndex.code]))
-        # 插入数据
         sql_str = get_write_str()
         sql_str = sql_str % KEY_LIST
         cursor.execute(sql_str, insert_data)
@@ -193,7 +201,7 @@ if __name__ == '__main__':
     # ret = check_url_not_in_table('https://www.cdnbus.one/SSNI-754')
     # print(ret)
     # old_to_new()
-    ret = get_paths_by_state(const.CodeState.normal)
+    ret = search_data('hodv')
     print(ret)
     # url = ''.join((const.BASEHTTPS, '/KOSATSU104'))
     # ret = check_url_not_in_table(url)

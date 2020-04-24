@@ -5,6 +5,7 @@ import const
 import controler
 import switchText
 import config
+import SearchView
 
 
 class MainView(ui.View):
@@ -25,6 +26,18 @@ class MainView(ui.View):
         self.add_mag()
         self.add_seg()
         self.add_img_view()
+        if adaptor_type == const.AdaptorType.search:
+            self.add_search_view(self.on_search)
+
+    def on_search(self, text):
+        print('', text)
+        self.img_v.search_data(text)
+
+    def add_search_view(self, func):
+        sv = SearchView.SearchView(func)
+        sv.name = 'search'
+        self.add_subview(sv)
+        self.search_view = sv
 
     def slider_action(self, val):
         mag_str = self.mag_strs[val * 2]
@@ -97,7 +110,7 @@ class MainView(ui.View):
         view.name = name
         self.add_subview(view)
         self.view_dic[name] = view
-        
+
     def on_set_front(self):
         self.img_v.reset_data()
 
@@ -108,11 +121,18 @@ class MainView(ui.View):
         img_v.set_owner(self)
 
     def layout(self):
+        y_off = 0
+        if self.adaptor_type == const.AdaptorType.search:
+            self.search_view.frame = (0, y_off, self.width, self.view_hight)
+            y_off += self.view_hight
+        
         for index, view in enumerate(self.view_dic.values()):
-            view.frame = (0, index * self.view_hight,
+            if index:
+                y_off += self.view_hight
+            view.frame = (0, y_off,
                           self.width, self.view_hight)
 
-        y_off = self.view_hight * len(self.view_dic)
+        y_off = y_off + self.view_hight
         img_height = self.height - y_off - self.view_hight * 5
         self.img_v.frame = (0, y_off, self.width, img_height)
 
@@ -139,7 +159,8 @@ class MainView(ui.View):
 if __name__ == '__main__':
     op = 0
     if op == 0:
-        view = MainView()
+        print(const.AdaptorType.__dict__)
+        view = MainView(const.AdaptorType.search)
         view.present('fullscreen')
     elif op == 1:
         config.mcIns.set_config('is_u', 1)
