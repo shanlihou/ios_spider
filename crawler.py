@@ -75,7 +75,7 @@ def main(entrance):
 if __name__ == '__main__':
     op = 0
     if op == 0:
-        main(const.BASEHTTPS)
+        #main(const.BASEHTTPS)
         main(''.join((const.BASEHTTPS, '/uncensored')))
     elif op == 1:
         url = ''.join((const.BASEHTTPS, '/uncensored'))

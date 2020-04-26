@@ -23,7 +23,7 @@ class DataAdaptor(object):
             self.index = self.index - 1 + self.nr_files
 
         self.index = self.index % self.nr_files
-    
+
     def love_current(self):
         pass
 
@@ -37,14 +37,14 @@ class DataAdaptor(object):
 
     def process_main_data(self, main):
         if not self.nr_files:
-            return 
-            
+            return
+
         main.data_process(self._get_code_data(), self.page, self.index)
 
     @property
     def nr_files(self):
         return len(self.files)
-    
+
     def reset_data(self):
         pass
 
@@ -69,7 +69,25 @@ class DataAdaptor(object):
         return code
 
     def _get_code_data(self):
+        print('get code', self._get_code())
         return controler.get_data_by_code(self._get_code())
+
+    def search_data(self, search_str):
+        pass
+
+
+class SearchAdaptor(DataAdaptor):
+    def __init__(self, owner, adaptor_type):
+        super(SearchAdaptor, self).__init__(owner)
+        self.page = 0
+        self.index = 0
+
+    def search_data(self, search_str):
+        self.files = controler.search_data(search_str)
+        self.index = 0
+
+    def _config_index_key(self):
+        return 'search_index'
 
 
 class DBDataAdaptor(DataAdaptor):
@@ -78,19 +96,18 @@ class DBDataAdaptor(DataAdaptor):
         self.adaptor_type = adaptor_type
         self.reset_data()
         self.page = 0
-    
+
     def reset_data(self):
         code_state = const.CodeState.hate if self.adaptor_type == const.AdaptorType.hate else const.CodeState.love
         self.files = controler.get_paths_by_state(code_state)
 
     def _config_index_key(self):
         return 'hate_index' if self.adaptor_type == const.AdaptorType.hate else 'love_index'
-        
+
     def hate_current(self):
         if self.adaptor_type == const.AdaptorType.love:
             if self.nr_files:
                 self.files.pop(self.index)
-            
 
 
 class DirDataAdaptor(DataAdaptor):
@@ -153,10 +170,10 @@ AdaptorDict = {
     const.AdaptorType.dir: DirDataAdaptor,
     const.AdaptorType.love: DBDataAdaptor,
     const.AdaptorType.hate: DBDataAdaptor,
+    const.AdaptorType.search: SearchAdaptor,
 }
 
 
 def get_adaptor(owner, adaptor_type):
     _class = AdaptorDict[adaptor_type]
     return _class(owner, adaptor_type)
-

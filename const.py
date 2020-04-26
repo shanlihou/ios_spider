@@ -12,6 +12,7 @@ class CodeIndex(object):
     actor = 8
     magnet = 10
     state = 12
+    save_path = 13
 
 
 class CodeState (object):
@@ -25,3 +26,4 @@ class AdaptorType(object):
     love = 1
     hate = 2
     dir = 3
+    search = 4

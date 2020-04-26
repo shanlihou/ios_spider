@@ -22,7 +22,7 @@ def get_html(url, Referer_url=None):
 def get_page_name(page):
     format_str = 'jpg_data_u_{}' if config.mcIns.get_config(
         'is_u') else 'jpg_data_{}'
-    return format_str.format(page)
+    return os.path.join('data', format_str.format(page))
 
 
 def get_page_dir():
