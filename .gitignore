@@ -1,0 +1,7 @@
+__pycache__
+*.log
+*.db
+data
+*.txt
+myconfig
+*.out
