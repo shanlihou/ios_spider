@@ -4,6 +4,7 @@
 import requests
 import os
 import config
+import logging
 
 headers = {
     'User-Agent	': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0',
@@ -12,10 +13,12 @@ headers = {
 
 def get_html(url, Referer_url=None):
     '''get_html(url),download and return html'''
+    logging.info('start get html:{}'.format(url))
     if Referer_url:
         headers['Referer'] = Referer_url
     # print(url)
     req = requests.get(url, headers=headers)
+    logging.info('get url end:{}'.format(url))
     return req.content
 
 

@@ -33,8 +33,8 @@ def get_dict(url):
                 fd.write('%s\n' % detail_url)
 
             print(e, e is KeyboardInterrupt)
-            import traceback
-            traceback.print_exc()
+            #import traceback
+            #traceback.print_exc()
             logging.info("Fail to crawl %s\ncrawl next detail page......" % detail_url)
             continue
 
@@ -72,7 +72,12 @@ def main(entrance):
         if next_page_url:
             join_db(next_page_url, is_uncensored)
         logging.info('cur url:{}'.format(next_page_url))
-        next_page_html = downloader.get_html(next_page_url)
+        try:
+            next_page_html = downloader.get_html(next_page_url)
+        except Exception as e:
+            logging.info('down exception:{}'.format(next_page_url))
+            continue
+        logging.info('cur url html down ok')
         next_page_url = pageparser.get_next_page_url(entrance, next_page_html)
         if next_page_url is None:
             logging.info('next page is none')
