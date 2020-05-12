@@ -8,18 +8,31 @@ import time
 import const
 import config
 import logging
+import time
 
 logging.basicConfig(
-                    level    = logging.INFO,              # 定义输出到文件的log级别，                                                            
-                    format   = '%(asctime)s  %(filename)s : %(levelname)s  %(message)s',    # 定义输出log的格式
-                    datefmt  = '%Y-%m-%d %A %H:%M:%S',                                     # 时间
-                    filename = 'craw.log',                # log文件名
-                    filemode = 'a+')
+    level=logging.INFO,              # 定义输出到文件的log级别，
+    # 定义输出log的格式
+    format='%(asctime)s  %(filename)s : %(levelname)s  %(message)s',
+    datefmt='%Y-%m-%d %A %H:%M:%S',                                     # 时间
+    filename='craw.log',                # log文件名
+    filemode='a+')
+
 
 def get_dict(url):
     """get the dict of the detail page and yield the dict"""
+    while True:
+        url_html = None
+        try:
+            url_html = downloader.get_html(url)
+        except Exception as e:
+            logging.info('get dict but except')
 
-    url_html = downloader.get_html(url)
+        if url_html is not None:
+            break
+
+        time.sleep(5)
+
     for detail_url in pageparser.parser_homeurl(url_html):
         if not controler.check_url_not_in_table(detail_url):
             logging.info('has down:{}'.format(detail_url))
@@ -33,9 +46,10 @@ def get_dict(url):
                 fd.write('%s\n' % detail_url)
 
             print(e, e is KeyboardInterrupt)
-            #import traceback
-            #traceback.print_exc()
-            logging.info("Fail to crawl %s\ncrawl next detail page......" % detail_url)
+            # import traceback
+            # traceback.print_exc()
+            logging.info(
+                "Fail to crawl %s\ncrawl next detail page......" % detail_url)
             continue
 
         dict_jav['URL'] = detail_url

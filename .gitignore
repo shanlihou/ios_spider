@@ -5,3 +5,10 @@ data
 *.txt
 myconfig
 *.out
+.project
+.pydevproject
+.settings
+*.png
+*.bak
+*.html
+
