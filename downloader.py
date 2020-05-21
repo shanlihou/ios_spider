@@ -17,7 +17,7 @@ def get_html(url, Referer_url=None):
     if Referer_url:
         headers['Referer'] = Referer_url
     # print(url)
-    req = requests.get(url, headers=headers)
+    req = requests.get(url, headers=headers, timeout=300)
     logging.info('get url end:{}'.format(url))
     return req.content
 
