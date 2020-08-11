@@ -11,4 +11,4 @@ myconfig
 *.png
 *.bak
 *.html
-
+*.pyc

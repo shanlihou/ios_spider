@@ -3,6 +3,7 @@
 BASEURL = 'www.busfan.pw'
 BASEHTTPS = 'https://' + BASEURL
 DB_NAME = 'CRAW_DATA'
+RASP_URL = 'http://192.168.16.223:8000'
 
 
 class CodeIndex(object):
@@ -30,3 +31,8 @@ class AdaptorType(object):
     hate = 2
     dir = 3
     search = 4
+
+
+class ErrCode(object):
+    success = 0
+    internalError = 1

@@ -8,13 +8,16 @@ import utils
 import psycopg2
 
 
-
 KEY_LIST = ('URL', 'code', 'date', 'length', 'director', 'maker',
+            'publish', 'series', 'actor', 'type', 'magnet', 'uncensored', 'state', 'save_path')
+
+GET_KEYS = ('ID', 'URL', 'code', 'date', 'length', 'director', 'maker',
             'publish', 'series', 'actor', 'type', 'magnet', 'uncensored', 'state', 'save_path')
 
 g_conn = None
 if not g_conn:
-    g_conn = psycopg2.connect(database="rasp_main", user="postgres", password="1", host="127.0.0.1", port="5432")
+    g_conn = psycopg2.connect(
+        database="rasp_main", user="postgres", password="1", host="127.0.0.1", port="5432")
 
 
 def _decode_utf8(aStr):
@@ -83,7 +86,8 @@ def check_url_not_in_table(url):
     cursor = g_conn.cursor()
     if type(url) is not str:
         url = url.decode('utf-8')
-    cursor.execute("select URL from {} where URL='{}'".format(const.DB_NAME, url))
+    cursor.execute(
+        "select URL from {} where URL='{}'".format(const.DB_NAME, url))
     check = cursor.fetchall()
     cursor.close()
     if check:
@@ -100,12 +104,20 @@ def change_state_by_code(code, state):
     cursor.close()
 
 
-def get_data():
+def wrap_row(row):
+    return {key: row[index] for index, key in enumerate(GET_KEYS)}
+
+
+def get_data_by_id(ID):
     cursor = g_conn.cursor()
-    c = cursor.execute('select * from JAVBUS_DATA')
-    for row in c:
-        print(row)
+    keys = ','.join(GET_KEYS)
+    cursor.execute('select {} from {} where ID = {}'.format(
+        keys, const.DB_NAME, ID))
+    ret = None
+    for row in cursor:
+        ret = row
     cursor.close()
+    return wrap_row(row)
 
 
 def get_data_by_code(code):
@@ -169,27 +181,6 @@ def get_code_path(code):
 
 def old_to_new():
     return
-    create_db('crawler2.sqlite3.db')
-    cursor = conn.cursor()
-    c = cursor.execute('select * from JAVBUS_DATA')
-    row_list = []
-    for row in c:
-        row_list.append(row)
-    cursor.close()
-    conn.close()
-
-    conn = sqlite3.connect("crawler2.sqlite3.db")
-    cursor = conn.cursor()
-    for row in row_list:
-
-        insert_data = list(row)
-        insert_data[-1] = get_code_path(row[const.CodeIndex.code])
-        sql_str = get_write_str()
-        sql_str = sql_str % KEY_LIST
-        cursor.execute(sql_str, insert_data)
-    cursor.close()
-    conn.commit()
-    conn.close()
 
 
 if __name__ == '__main__':
@@ -197,12 +188,10 @@ if __name__ == '__main__':
     # print(ret)
     # old_to_new()
     #ret = search_data('hodv')
-    #print(ret)
-    #get_data()
+    # print(ret)
+    # get_data()
     # url = ''.join((const.BASEHTTPS, '/KOSATSU104'))
     # ret = check_url_not_in_table(url)
     # print(ret)
+    get_data_by_id(1)
     pass
-
-
-
