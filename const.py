@@ -1,5 +1,8 @@
-BASEURL = 'www.cdnbus.one'
+#BASEURL = 'www.busfan.us'
+#BASEURL = 'www.busfan.cloud'
+BASEURL = 'www.busfan.pw'
 BASEHTTPS = 'https://' + BASEURL
+DB_NAME = 'CRAW_DATA'
 
 
 class CodeIndex(object):
