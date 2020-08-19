@@ -46,8 +46,10 @@ function onGetData(retData) {
     content.innerHTML = formatRetData(retData)
     console.log(content)
     let img = document.querySelector("#craw_img");
-    console.log(retData['save_path']);
-    img.src = "/good_img/48.png";
+    console.log(retData.retData.save_path);
+    let imgsrc = retData.retData.save_path;
+    imgsrc.replace(/data\//, "");
+    img.src = "/good_img/" + imgsrc;
     console.log(img);
 }
 
