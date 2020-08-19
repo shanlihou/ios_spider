@@ -20,7 +20,7 @@ function post(url, data, fn) {
 function getIndex() {
     let index = localStorage.getItem('index')
     if (index != null) {
-        return index;
+        return parseInt(index);
     }
 
     return 1;
@@ -41,12 +41,12 @@ function onGetData(retData) {
     if (retData.Err != 0) {
         return;
     }
-    setIndex(retData.retData.ID);
+    setIndex(parseInt(retData.retData.ID));
     let content = document.querySelector("#content")
     content.innerHTML = formatRetData(retData)
     console.log(content)
     let img = document.querySelector("#craw_img");
-    console.log(img);
+    console.log(retData['save_path']);
     img.src = "/good_img/48.png";
     console.log(img);
 }
@@ -60,11 +60,16 @@ post("/my/", {
 });
 
 document.querySelector("#bPrev").onclick = function() {
-
+    post("/my/", {
+        cmd: "get_data_by_id",
+        id: getIndex() - 1
+    }, (retData)=> {
+        console.log(retData)
+        onGetData(retData)
+    });
 }
 
 document.querySelector("#bNext").onclick = function() {
-
     post("/my/", {
         cmd: "get_data_by_id",
         id: getIndex() + 1
