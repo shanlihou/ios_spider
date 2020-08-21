@@ -11,7 +11,8 @@ function post(url, data, fn) {
                 fn(ret);
                 return;
             }
-            fn(JSON.parse(ret));
+            ret = JSON.parse(ret)
+            fn(ret);
         }
     };
     xhr.send(data);
@@ -44,13 +45,22 @@ function onGetData(retData) {
     setIndex(parseInt(retData.retData.ID));
     let content = document.querySelector("#content")
     content.innerHTML = formatRetData(retData)
+    document.querySelector("#ID").innerHTML = retData.retData.ID;
+    document.querySelector("#code").innerHTML = retData.retData.code;
     console.log(content)
     let img = document.querySelector("#craw_img");
     console.log(retData.retData.save_path);
     let imgsrc = retData.retData.save_path;
-    imgsrc.replace(/data\//, "");
-    img.src = "/good_img/" + imgsrc;
+    imgsrc = "/good_img" + imgsrc.replace(/data/, "");
+    console.log(imgsrc);
+    img.src = imgsrc;
     console.log(img);
+
+    let el = document.querySelector('#data_pool');
+    let childs = el.childNodes;
+    for(let i = childs .length - 1; i >= 0; i--) {
+        el.removeChild(childs[i]);
+    }
 }
 
 post("/my/", {
@@ -78,5 +88,30 @@ document.querySelector("#bNext").onclick = function() {
     }, (retData)=> {
         console.log(retData)
         onGetData(retData)
+    });
+}
+
+document.querySelector("#bMag").onclick = function() {
+    post("/my/", {
+        cmd: "get_data_by_code",
+        code: document.querySelector("#code").innerHTML
+    }, (retData)=> {
+        console.log(retData)
+        let div = document.querySelector("#data_pool")
+        for (let mag of retData.retData) {
+            let p = document.createElement("p");
+            p.innerHTML = mag.size;
+            div.appendChild(p);
+            let content = mag.mag;
+            p.onclick = function (){
+                let aux = document.createElement("input");
+                aux.setAttribute("value", content);
+                document.body.appendChild(aux);
+                aux.select();
+                document.execCommand("copy");
+                document.body.removeChild(aux);
+            }
+
+        }
     });
 }

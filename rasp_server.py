@@ -7,6 +7,8 @@ from urllib.parse import urlparse
 import controler
 import json
 import const
+import magnet
+import functools
 
 
 curdir = path.dirname(path.realpath(__file__))
@@ -26,6 +28,9 @@ mimedic = [
     ('.avi', 'video/x-msvideo'),
 ]
 
+@functools.lru_cache(maxsize=1024)
+def get_mag_list(code):
+    return [{'mag': mag, 'size': size} for mag, size in magnet.getAllMagnet(code)]
 
 class CmdHandler(object):
     @classmethod
@@ -48,6 +53,17 @@ class CmdHandler(object):
             'id': data['id'],
             'retData': ret,
         }
+
+    @classmethod
+    def get_data_by_code(cls, data):
+        data_list = get_mag_list(data['code'])
+        return {
+            'Err': const.ErrCode.success,
+            'cmd': data['cmd'],
+            'code': data['code'],
+            'retData': data_list
+        }
+
 
 
 class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
