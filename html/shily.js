@@ -49,12 +49,9 @@ function onGetData(retData) {
     document.querySelector("#code").innerHTML = retData.retData.code;
     console.log(content)
     let img = document.querySelector("#craw_img");
-    console.log(retData.retData.save_path);
     let imgsrc = retData.retData.save_path;
     imgsrc = "/good_img" + imgsrc.replace(/data/, "");
-    console.log(imgsrc);
-    img.src = imgsrc;
-    console.log(img);
+    //img.src = imgsrc;
 
     let el = document.querySelector('#data_pool');
     let childs = el.childNodes;
@@ -113,5 +110,16 @@ document.querySelector("#bMag").onclick = function() {
             }
 
         }
+    });
+}
+
+document.querySelector("#bPage").onclick = function() {
+    console.log(document.querySelector("#tPage").value)
+    post("/my/", {
+        cmd: "get_data_by_id",
+        id: document.querySelector("#tPage").value
+    }, (retData)=> {
+        console.log(retData)
+        onGetData(retData)
     });
 }
