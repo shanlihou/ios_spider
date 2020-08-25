@@ -5,6 +5,7 @@ function post(url, data, fn) {
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onreadystatechange = function() {
+        document.querySelector("#state").innerHTML = "ret:" + xhr.readyState + ',' + xhr.status;
         if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 304)) {
             let ret = JSON.parse(xhr.responseText)
             if (ret.Err != null) {
@@ -16,6 +17,7 @@ function post(url, data, fn) {
         }
     };
     xhr.send(data);
+    document.querySelector("#state").innerHTML = "start";
 }
 
 function getIndex() {
@@ -121,5 +123,14 @@ document.querySelector("#bPage").onclick = function() {
     }, (retData)=> {
         console.log(retData)
         onGetData(retData)
+    });
+}
+
+document.querySelector("#bLast").onclick = function() {
+    post("/my/", {
+        cmd: "get_last_watch_id"
+    }, (retData)=> {
+        console.log(retData)
+        document.querySelector("#tPage").value = retData.retData;
     });
 }

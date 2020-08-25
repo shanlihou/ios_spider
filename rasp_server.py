@@ -9,6 +9,7 @@ import json
 import const
 import magnet
 import functools
+import config
 
 
 curdir = path.dirname(path.realpath(__file__))
@@ -46,6 +47,7 @@ class CmdHandler(object):
         
     @classmethod
     def get_data_by_id(cls, data):
+        config.mcIns.set_config('last_watch_id', data['id'])
         ret = controler.get_data_by_id(data['id'])
         return {
             'Err': const.ErrCode.success,
@@ -53,6 +55,16 @@ class CmdHandler(object):
             'id': data['id'],
             'retData': ret,
         }
+
+    @classmethod
+    def get_last_watch_id(cls, data):
+        last_watch_id = config.mcIns.get_config('last_watch_id')
+        return {
+            'Err': const.ErrCode.success,
+            'cmd': data['cmd'],
+            'retData': last_watch_id,
+        }
+
 
     @classmethod
     def get_data_by_code(cls, data):
