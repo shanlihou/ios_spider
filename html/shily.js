@@ -62,14 +62,6 @@ function onGetData(retData) {
     }
 }
 
-post("/my/", {
-    cmd: "get_data_by_id",
-    id: getIndex()
-}, (retData)=> {
-    console.log(retData)
-    onGetData(retData)
-});
-
 document.querySelector("#bPrev").onclick = function() {
     post("/my/", {
         cmd: "get_data_by_id",
@@ -91,15 +83,21 @@ document.querySelector("#bNext").onclick = function() {
 }
 
 document.querySelector("#bMag").onclick = function() {
+    let search = document.querySelector("#tSearch").value;
+    if (search == "")
+    {
+        search = document.querySelector("#code").innerHTML;
+    }
+
     post("/my/", {
         cmd: "get_data_by_code",
-        code: document.querySelector("#code").innerHTML
+        code: search
     }, (retData)=> {
         console.log(retData)
         let div = document.querySelector("#data_pool")
         for (let mag of retData.retData) {
             let p = document.createElement("p");
-            p.innerHTML = mag.size;
+            p.innerHTML = mag.size + "\t\t" + mag.name;
             div.appendChild(p);
             let content = mag.mag;
             p.onclick = function (){

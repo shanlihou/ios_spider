@@ -31,7 +31,7 @@ mimedic = [
 
 @functools.lru_cache(maxsize=1024)
 def get_mag_list(code):
-    return [{'mag': mag, 'size': size} for mag, size in magnet.getAllMagnet(code)]
+    return [{'mag': mag, 'size': size, 'name': name} for mag, size, name in magnet.getAllMagnet(code)]
 
 class CmdHandler(object):
     @classmethod
