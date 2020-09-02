@@ -49,6 +49,7 @@ function onGetData(retData) {
     content.innerHTML = formatRetData(retData)
     document.querySelector("#ID").innerHTML = retData.retData.ID;
     document.querySelector("#code").innerHTML = retData.retData.code;
+    document.querySelector("#actor").innerHTML = retData.retData.actor;
     console.log(content)
     let img = document.querySelector("#craw_img");
     let imgsrc = retData.retData.save_path;

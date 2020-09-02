@@ -2,42 +2,52 @@
 <html>
 <head>
 <title>Welcome to nginx!</title>
-<style>
-    body {
-        width: 35em;
-        margin: 0 auto;
-        font-family: Tahoma, Verdana, Arial, sans-serif;
-    }
-</style>
 </head>
 <body>
-<img id="craw_img"></img>
-<p id="content"></p>
-<p id="ID"></p>
-<p id="code"></p>
-<p id="state"></p>
-<div id='data_pool'></div>
-<input type="text" value="" id="tSearch"/>
-<input type="text" value="" id="tPage"/>
-<input type="button" value="page" id="bPage" class="big_button"></input>
-<input type="button" value="prev" id="bPrev" class="big_button"></input>
-<input type="button" value="mag" id="bMag" class="big_button"></input>
-<input type="button" value="next" id="bNext" class="big_button"></input>
-<input type="button" value="last" id="bLast" class="big_button"></input>
-<input type="button" value="reset" id="bReset" class="big_button"></input>
-<!-- <h1>Welcome to ckz!</h1>
-<p>If you see this page, the nginx web server is successfully installed and
-working. Further configuration is required.</p>
+    <div>
+        <img id="craw_img"></img>
+        <p id="content"></p>
+        <p id="ID"></p>
+        <p id="code"></p>
+        <p id="actor"></p>
+        <p id="state"></p>
+    </div>
+    <div>
+        <input type="text" value="" id="tSearch"/>
+        <input type="button" value="mag" id="bMag" class="search_button"></input>
+    </div>
 
-<p>For online documentation and support please refer to
-<a href="http://nginx.org/">nginx.org</a>.<br/>
-Commercial support is available at
-<a href="http://nginx.com/">nginx.com</a>.</p>
+    <div id='data_pool'></div>
+    <div>
+        <input type="text" value="" id="tPage"/>
+        <input type="button" value="page" id="bPage" class="search_button"></input>
+    </div>
+    <div>
+        <input type="button" value="prev" id="bPrev" class="big_button"></input>
+        <input type="button" value="next" id="bNext" class="big_button"></input>
+        <input type="button" value="last" id="bLast" class="big_button"></input>
+        <input type="button" value="reset" id="bReset" class="small_button"></input>
+    </div>
+    <!-- <h1>Welcome to ckz!</h1>
+    <p>If you see this page, the nginx web server is successfully installed and
+    working. Further configuration is required.</p>
 
-<p><em>Thank you for using nginx.</em></p> -->
-<script src="shily.js"></script>
-<style>
-    .big_button{height:120px; width:220px}
-</style>
+    <p>For online documentation and support please refer to
+    <a href="http://nginx.org/">nginx.org</a>.<br/>
+    Commercial support is available at
+    <a href="http://nginx.com/">nginx.com</a>.</p>
+
+    <p><em>Thank you for using nginx.</em></p> -->
+    <script src="shily.js"></script>
+    <style>
+        body {
+            width: 35em;
+            margin: 0 auto;
+            font-family: Tahoma, Verdana, Arial, sans-serif;
+        }
+        .big_button{height:120px; width:220px}
+        .small_button{height:20px; width:20px}
+        .search_button{height:20px; width:50px}
+    </style>
 </body>
 </html>
