@@ -132,8 +132,9 @@ def parser_content(html, is_save=False):
     return categories
 
 
+
 if __name__ == '__main__':
-    op = 1
+    op = 2
     if op == 0:
         with open('example.html', 'rb') as fr:
             content = fr.read()
@@ -143,3 +144,8 @@ if __name__ == '__main__':
         with open('magnet.html', 'rb') as fr:
             ret = _parser_magnet(fr.read())
             print(ret)
+    elif op == 2:
+        with open('forum.txt', 'wb') as fw:
+            content = downloader.get_html('https://{}/forum/forum.php?mod=forumdisplay&fid=2'.format(const.BASEURL))
+            fw.write(content)
+

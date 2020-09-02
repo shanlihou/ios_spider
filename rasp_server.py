@@ -44,6 +44,11 @@ class CmdHandler(object):
             import traceback
             traceback.print_exc()
             return {'Err': const.ErrCode.internalError}
+
+    @classmethod
+    def exit_self(cls, data):
+        print('will exit')
+        exit(0)
         
     @classmethod
     def get_data_by_id(cls, data):

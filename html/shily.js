@@ -132,3 +132,11 @@ document.querySelector("#bLast").onclick = function() {
         document.querySelector("#tPage").value = retData.retData;
     });
 }
+
+document.querySelector("#bReset").onclick = function() {
+    post("/my/", {
+        cmd: "exit_self"
+    }, (retData)=> {
+        console.log('exit')
+    });
+}
