@@ -16,11 +16,21 @@
         <input type="text" value="" id="tSearch"/>
         <input type="button" value="mag" id="bMag" class="search_button"></input>
     </div>
-
-    <div id='data_pool'></div>
+    <div>
+        <div id='data_pool'></div>
+        <div id='ret_pool'></div>
+    </div>
     <div>
         <input type="text" value="" id="tPage"/>
         <input type="button" value="page" id="bPage" class="search_button"></input>
+    </div>
+    <div>
+		<select name="selector" id="searchType">
+			<option value="code" >code</option>
+			<option value="actor" selected>actor</option>
+        </select>
+        <input type="text" value="" id="tMSearch"/>
+        <input type="button" value="search" id="bMSearch" class="search_button"></input>
     </div>
     <div>
         <input type="button" value="prev" id="bPrev" class="big_button"></input>
@@ -28,16 +38,6 @@
         <input type="button" value="last" id="bLast" class="big_button"></input>
         <input type="button" value="reset" id="bReset" class="small_button"></input>
     </div>
-    <!-- <h1>Welcome to ckz!</h1>
-    <p>If you see this page, the nginx web server is successfully installed and
-    working. Further configuration is required.</p>
-
-    <p>For online documentation and support please refer to
-    <a href="http://nginx.org/">nginx.org</a>.<br/>
-    Commercial support is available at
-    <a href="http://nginx.com/">nginx.com</a>.</p>
-
-    <p><em>Thank you for using nginx.</em></p> -->
     <script src="shily.js"></script>
     <style>
         body {

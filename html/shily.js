@@ -40,6 +40,14 @@ function formatRetData(retData) {
         // + "actor:" + retData['actor'] + "\n"
 }
 
+function clearPool(tag) {
+    let el = document.querySelector(tag);
+    let childs = el.childNodes;
+    for(let i = childs .length - 1; i >= 0; i--) {
+        el.removeChild(childs[i]);
+    }
+}
+
 function onGetData(retData) {
     if (retData.Err != 0) {
         return;
@@ -55,12 +63,7 @@ function onGetData(retData) {
     let imgsrc = retData.retData.save_path;
     imgsrc = "/good_img" + imgsrc.replace(/data/, "");
     //img.src = imgsrc;
-
-    let el = document.querySelector('#data_pool');
-    let childs = el.childNodes;
-    for(let i = childs .length - 1; i >= 0; i--) {
-        el.removeChild(childs[i]);
-    }
+    clearPool("#data_pool")
 }
 
 document.querySelector("#bPrev").onclick = function() {
@@ -124,6 +127,46 @@ document.querySelector("#bPage").onclick = function() {
         onGetData(retData)
     });
 }
+
+
+document.querySelector("#bMSearch").onclick = function() {
+    let selector = document.querySelector("#searchType");
+    let searchKey = selector.options[selector.selectedIndex].text;
+    let search = document.querySelector("#tMSearch").value;
+    console.log(searchKey);
+    if (search == "")
+    {
+        return;
+    }
+
+    post("/my/", {
+        cmd: "search",
+        key: searchKey,
+        val: search,
+    }, (retData)=> {
+        console.log(retData)
+        clearPool("#ret_pool")
+        let div = document.querySelector("#ret_pool")
+        for (let one of retData.retData) {
+            let p = document.createElement("p");
+            p.innerHTML = one.code + "\t\t" + one.actor + "\t\t" + one.series;
+            p.mInfo = one;
+            div.appendChild(p);
+            let _ID = one.ID;
+            p.onclick = function (){
+                post("/my/", {
+                    cmd: "get_data_by_id",
+                    id: _ID
+                }, (retData)=> {
+                    console.log(retData)
+                    onGetData(retData)
+                });
+            }
+
+        }
+    });
+}
+
 
 document.querySelector("#bLast").onclick = function() {
     post("/my/", {

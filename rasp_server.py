@@ -33,6 +33,29 @@ mimedic = [
 def get_mag_list(code):
     return [{'mag': mag, 'size': size, 'name': name} for mag, size, name in magnet.getAllMagnet(code)]
 
+
+def push_id(id):
+    lq = config.mcIns.get_config('last_watch_queue', [])
+    lq.append(id)
+    if len(lq) > 100:
+        lq.pop(0)
+
+    config.mcIns.set_config('last_watch_queue', lq)
+
+
+def pop_id():
+    lq = config.mcIns.get_config('last_watch_queue', [])
+    length = len(lq)
+    if length == 0:
+        return 1
+    elif length == 1:
+        return lq[0]
+    else:
+        ret = lq.pop()
+        config.mcIns.set_config('last_watch_queue', lq)
+        return ret
+
+
 class CmdHandler(object):
     @classmethod
     def do(cls, data):
@@ -46,13 +69,24 @@ class CmdHandler(object):
             return {'Err': const.ErrCode.internalError}
 
     @classmethod
+    def search(cls, data):
+        ret_list = controler.get_data_by_key(data['key'], data['val'])
+        return {
+            'Err': const.ErrCode.success,
+            'cmd': data['cmd'],
+            'key': data['key'],
+            'val': data['val'],
+            'retData': ret_list,
+        }
+
+    @classmethod
     def exit_self(cls, data):
         print('will exit')
         exit(0)
         
     @classmethod
     def get_data_by_id(cls, data):
-        config.mcIns.set_config('last_watch_id', data['id'])
+        push_id(data['id'])
         ret = controler.get_data_by_id(data['id'])
         return {
             'Err': const.ErrCode.success,
@@ -63,7 +97,7 @@ class CmdHandler(object):
 
     @classmethod
     def get_last_watch_id(cls, data):
-        last_watch_id = config.mcIns.get_config('last_watch_id')
+        last_watch_id = pop_id()
         return {
             'Err': const.ErrCode.success,
             'cmd': data['cmd'],

@@ -120,15 +120,16 @@ def get_data_by_id(ID):
     return wrap_row(row)
 
 
-def get_data_by_code(code):
+def get_data_by_key(key, code):
     cursor = g_conn.cursor()
-    c = cursor.execute(
-        'select * from JAVBUS_DATA where code = "{}"'.format(code))
-    ret = None
-    for row in c:
-        ret = row
+    keys = ','.join(GET_KEYS)
+    cursor.execute("select {} from {} where {} = '{}'".format(
+        keys, const.DB_NAME, key, code))
+    ret_list = []
+    for row in cursor:
+        ret_list.append(wrap_row(row))
     cursor.close()
-    return ret
+    return ret_list
 
 
 def get_state_by_code(code):
