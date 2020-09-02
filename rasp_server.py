@@ -10,7 +10,16 @@ import const
 import magnet
 import functools
 import config
+import logging
 
+
+logging.basicConfig(
+    level=logging.INFO,              # 定义输出到文件的log级别，
+    # 定义输出log的格式
+    format='%(asctime)s  %(filename)s : %(levelname)s  %(message)s',
+    datefmt='%Y-%m-%d %A %H:%M:%S',                                     # 时间
+    filename='rasp.log',                # log文件名
+    filemode='a+')
 
 curdir = path.dirname(path.realpath(__file__))
 sep = '/'
@@ -59,13 +68,16 @@ def pop_id():
 class CmdHandler(object):
     @classmethod
     def do(cls, data):
+        logging.info("do:{}".format(str(data)))
         try:
             cmd = data['cmd']
             ret = getattr(cls, cmd)(data)
+            logging.info("ret:{}".format(str(ret)))
             return json.dumps(ret)
         except Exception as e:
             import traceback
             traceback.print_exc()
+            logging.error("err:{}".format(str(e)))
             return {'Err': const.ErrCode.internalError}
 
     @classmethod
