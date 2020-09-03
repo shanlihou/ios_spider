@@ -121,6 +121,27 @@ def get_data_by_id(ID):
 
 
 def get_data_by_key(key, code):
+    if not code:
+        return []
+
+    code = code.upper()
+
+    cursor = g_conn.cursor()
+    keys = ','.join(GET_KEYS)
+    index = GET_KEYS.index(key)
+    cursor.execute("select {} from {}".format(
+        keys, const.DB_NAME))
+    ret_list = []
+    for row in cursor:
+        if code not in row[index].upper():
+            continue
+
+        ret_list.append(wrap_row(row))
+    cursor.close()
+    return ret_list
+
+
+def get_data_by_key_bak(key, code):
     cursor = g_conn.cursor()
     keys = ','.join(GET_KEYS)
     cursor.execute("select {} from {} where {} = '{}'".format(
